@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "337633138573",
+    "project_id": "attendance-system-8a220",
+    "storage_bucket": "attendance-system-8a220.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:337633138573:android:1149304b48adba11030fc4",
+        "android_client_info": {
+          "package_name": "com.example.facerecognition"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "337633138573-q6ogep8lvif2ccrj5aoe4cufvl9kt0sp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDGBe1qFw0I4rx26EtO2hEzI81yej51nEs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "337633138573-q6ogep8lvif2ccrj5aoe4cufvl9kt0sp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
