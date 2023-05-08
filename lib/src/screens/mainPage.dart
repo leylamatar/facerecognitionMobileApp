@@ -1,7 +1,6 @@
 import 'package:facerecognition/src/screens/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import 'authPage.dart';
 import 'home.dart';
 
