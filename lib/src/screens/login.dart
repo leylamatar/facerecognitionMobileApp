@@ -14,12 +14,17 @@ class _LoginPageState extends State<LoginPage> {
   //text contorollers
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-
+  
   Future signIn() async {
+    
+    // Sign in with Firebase Auth
     await FirebaseAuth.instance.signInWithEmailAndPassword(
       email: _emailController.text.trim(),
       password: _passwordController.text.trim(),
+      
+      
     );
+   
   }
 
   @override

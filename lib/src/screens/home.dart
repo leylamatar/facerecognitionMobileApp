@@ -1,3 +1,4 @@
+import 'package:facerecognition/src/screens/studentlist.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'addstudent.dart';
@@ -34,7 +35,7 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: const Color.fromARGB(255, 24, 56, 82),
       body: Center(
         child: Padding(
-          padding: EdgeInsets.only(top: 30),
+          padding: const EdgeInsets.only(top: 30),
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -47,7 +48,7 @@ class _HomePageState extends State<HomePage> {
                       color: Colors.white,
                       fontFamily: 'RobotoMono'),
                 ),
-                SizedBox(height: 30.0),
+                const SizedBox(height: 30.0),
                 ElevatedButton(
                   onPressed: () {},
                   child: Text('Take Attendance'),
@@ -55,7 +56,12 @@ class _HomePageState extends State<HomePage> {
                 ),
                 SizedBox(height: 20.0),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => showstudentPage()),
+                      );
+                  },
                   child: Text('Student List'),
                   style: sharedButtonStyle,
                 ),
