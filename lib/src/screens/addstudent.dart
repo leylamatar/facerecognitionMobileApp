@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
-import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class AddStudentPage extends StatefulWidget {
   @override
@@ -11,6 +12,7 @@ class AddStudentPage extends StatefulWidget {
 }
 
 class _AddStudentPageState extends State<AddStudentPage> {
+  var globalKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _idController = TextEditingController();
   final _emailController = TextEditingController();
@@ -41,14 +43,17 @@ class _AddStudentPageState extends State<AddStudentPage> {
       FirebaseFirestore.instance.collection('students');
 
   void adddata() async {
-    await students
-        .add({
-          "id": _idController.text.trim(),
-          "Name": _nameController.text.trim(),
-          "Email": _emailController.text.trim(),
-        })
-        .then((value) => showSuccessToast())
-        .catchError((error) => showErrorToast());
+    final imgurl = await uploadImage(image!);
+    await students.add({
+      "id": _idController.text.trim(),
+      "Name": _nameController.text.trim(),
+      "Email": _emailController.text.trim(),
+      "Profile Picture": imgurl,
+    }).whenComplete(() => displayMessage('new data added successfully'));
+  }
+
+  displayMessage(String message) {
+    Fluttertoast.showToast(msg: message);
   }
 
   @override
@@ -59,10 +64,38 @@ class _AddStudentPageState extends State<AddStudentPage> {
     super.dispose();
   }
 
+  File? image;
+  late String downloadUrl;
+  Future imagePicker() async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+
+      if (image == null) return;
+      final imageTemporary = File(image.path);
+      setState(() => this.image = imageTemporary);
+    } on PlatformException catch (e) {
+      print('Failed to pick image : $e');
+    }
+  }
+
+  Future uploadImage(File image) async {
+    String url;
+    String imgId = DateTime.now().microsecondsSinceEpoch.toString();
+    Reference reference =
+        FirebaseStorage.instance.ref().child('images/').child('users$imgId');
+    await reference.putFile(image);
+    url = await reference.getDownloadURL();
+    return url;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 24, 56, 82),
+      appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 14, 56, 90),
+        title: Text("Add Student "),
+      ),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -80,6 +113,35 @@ class _AddStudentPageState extends State<AddStudentPage> {
                 ),
                 const SizedBox(height: 20),
 
+                Container(
+                  width: 200,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Column(
+                    children: [
+                      image != null
+                          ? ClipOval(
+                              child: Image.file(
+                                image!,
+                                width: 160,
+                                height: 160,
+                                fit: BoxFit.cover,
+                              ),
+                            )
+                          : Image.asset("assets/images/profile.png"),
+                      const SizedBox(height: 20),
+                      ElevatedButton(
+                          onPressed: () {
+                            imagePicker().whenComplete(() {
+                              uploadImage(image!);
+                            });
+                          },
+                          child: const Text("Select image"))
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 30),
                 //name
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -159,7 +221,7 @@ class _AddStudentPageState extends State<AddStudentPage> {
                     onPressed: () {
                       adddata();
                     },
-                    child: Text('Add Data'))
+                    child: const Text('Add Data'))
               ],
             ),
           ),

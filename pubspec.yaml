@@ -15,7 +15,7 @@ dependencies:
   cloud_firestore: ^4.5.1
   image_picker: ^0.8.7+4
   fluttertoast: ^8.2.1
-
+  firebase_storage: ^11.2.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -26,3 +26,4 @@ flutter:
   assets:
     - assets/images/log1.png
     - assets/images/logo.png
+    - assets/images/profile.png

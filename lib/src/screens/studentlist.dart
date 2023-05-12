@@ -13,13 +13,17 @@ class _showstudentPageState extends State<showstudentPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 24, 56, 82),
-      appBar: AppBar(backgroundColor: Color.fromARGB(255, 14, 56, 90),
+      appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 14, 56, 90),
+        title: Text("Student List"),
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection('students').snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
-            return Center(child: Text('No Data Exists'));
+            return Center(
+              child: CircularProgressIndicator(),
+            );
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
@@ -39,8 +43,21 @@ class _showstudentPageState extends State<showstudentPage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(snapshot.data?.docs[index]['Email']),
-                        Text(snapshot.data?.docs[index]['Name']),
+                        ClipOval(
+                          child: Image.network(
+                            "${snapshot.data?.docs[index]['Profile Picture']}",
+                            height: 110,
+                            width: 120,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                            "Student Name :${snapshot.data?.docs[index]['Name']} "),
+                        Text("Student ID: ${snapshot.data?.docs[index]['id']}"),
+                        Text(
+                            "Student Email : ${snapshot.data?.docs[index]['Email']}"),
+
                         // Text(snapshot.data?.docs[index]['id']),
                       ],
                     ),
