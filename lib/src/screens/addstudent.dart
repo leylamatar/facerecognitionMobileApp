@@ -7,6 +7,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class AddStudentPage extends StatefulWidget {
+  const AddStudentPage({super.key});
+
   @override
   State<AddStudentPage> createState() => _AddStudentPageState();
 }
@@ -101,7 +103,9 @@ class _AddStudentPageState extends State<AddStudentPage> {
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              
               children: [
+                const SizedBox(height: 20),
                 //başlık
                 const Text(
                   "ADD NEW STUDENT",

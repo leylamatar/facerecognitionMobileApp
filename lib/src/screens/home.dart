@@ -1,24 +1,28 @@
+import 'package:facerecognition/src/screens/registrationPage.dart';
 import 'package:facerecognition/src/screens/studentlist.dart';
+import 'package:facerecognition/src/screens/takeattendance.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'addstudent.dart';
+import '/ML/Recognition.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
-
+  //to save the faces globaly we used map
+static Map<String, Recognition> registered = Map();
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 ButtonStyle sharedButtonStyle = ButtonStyle(
   backgroundColor:
-      MaterialStateProperty.all<Color>(Color.fromARGB(255, 255, 255, 255)),
+      MaterialStateProperty.all<Color>(const Color.fromARGB(255, 255, 255, 255)),
   foregroundColor:
-      MaterialStateProperty.all<Color>(Color.fromARGB(255, 0, 22, 68)),
-  padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(15)),
-  fixedSize: MaterialStateProperty.all(Size(290, 60)),
+      MaterialStateProperty.all<Color>(const Color.fromARGB(255, 0, 22, 68)),
+  padding: MaterialStateProperty.all<EdgeInsets>(const EdgeInsets.all(15)),
+  fixedSize: MaterialStateProperty.all(const Size(290, 60)),
   textStyle: MaterialStateProperty.all<TextStyle>(
-    TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
   ),
   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
     RoundedRectangleBorder(
@@ -50,54 +54,69 @@ class _HomePageState extends State<HomePage> {
                 ),
                 const SizedBox(height: 30.0),
                 ElevatedButton(
-                  onPressed: () {},
-                  child: Text('Take Attendance'),
-                  style: sharedButtonStyle,
-                ),
-                SizedBox(height: 20.0),
-                ElevatedButton(
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => showstudentPage()),
-                      );
-                  },
-                  child: Text('Student List'),
-                  style: sharedButtonStyle,
-                ),
-                SizedBox(height: 20.0),
-                ElevatedButton(
-                  onPressed: () {},
-                  child: Text('Course List'),
-                  style: sharedButtonStyle,
-                ),
-                SizedBox(height: 20.0),
-                ElevatedButton(
-                  onPressed: () {},
-                  child: Text('Attendance Sheet'),
-                  style: sharedButtonStyle,
-                ),
-                SizedBox(height: 20.0),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => AddStudentPage()),
+                      MaterialPageRoute(
+                          builder: (context) => const TakeAttendancePage()),
                     );
                   },
-                  child: Text('Add New Student'),
                   style: sharedButtonStyle,
+                  child: const Text('Take Attendance'),
                 ),
-                SizedBox(height: 40.0),
+                const SizedBox(height: 20.0),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const showstudentPage()),
+                    );
+                  },
+                  style: sharedButtonStyle,
+                  child: const Text('Student List'),
+                ),
+                const SizedBox(height: 20.0),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const RegistrationPage()),
+                    );
+                  },
+                  style: sharedButtonStyle,
+                  child: const Text('Course List'),
+                ),
+                const SizedBox(height: 20.0),
+                ElevatedButton(
+                  onPressed: () {
+                   
+                  },
+                  style: sharedButtonStyle,
+                  child: const Text('Attendance Sheet'),
+                ),
+                const SizedBox(height: 20.0),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const AddStudentPage()),
+                    );
+                  },
+                  style: sharedButtonStyle,
+                  child: const Text('Add New Student'),
+                ),
+                const SizedBox(height: 40.0),
                 ElevatedButton(
                   onPressed: () {
                     FirebaseAuth.instance.signOut();
                   },
-                  child: Text('Log Out'),
                   style: ElevatedButton.styleFrom(
-                    textStyle: TextStyle(fontSize: 15),
-                    backgroundColor: Color.fromARGB(255, 4, 1, 37),
+                    textStyle: const TextStyle(fontSize: 15),
+                    backgroundColor: const Color.fromARGB(255, 4, 1, 37),
                   ),
+                  child: const Text('Log Out'),
                 ),
               ],
             ),
