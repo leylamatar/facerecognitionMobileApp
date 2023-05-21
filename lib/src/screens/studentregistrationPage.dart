@@ -1,6 +1,9 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facerecognition/src/screens/attendanceWcamera.dart';
 import 'package:facerecognition/src/screens/home.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
@@ -20,8 +23,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
   late ImagePicker imagePicker;
   File? _image;
   late FaceDetector faceDetector; //declare detection
-
   late Recognizer recognizer;
+
   @override
   void initState() {
     super.initState();
@@ -54,6 +57,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
       });
     }
   }
+
+  final FirebaseStorage storage = FirebaseStorage.instance;
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
 //detect and save faces as a list
   List<Face> faces = [];
@@ -103,14 +109,41 @@ class _RegistrationPageState extends State<RegistrationPage> {
     drawRectangleAroundFaces();
   }
 
-//TODO Face Registration Dialogue
+  void saveFaceToFirestore(
+      String name, Recognition recognition, String id) async {
+    final imgurl = await uploadImage(_image!);
+
+    print('ID: $id');
+    firestore.collection('faces').add({
+      'name': name.trim(),
+      'id': id,
+      "Profile Picture": imgurl,
+    });
+  }
+
+  Future uploadImage(File image) async {
+    String url;
+   // String imgId = DateTime.now().microsecondsSinceEpoch.toString();
+    String id = idEditingController.text;
+    Reference reference = FirebaseStorage.instance
+        .ref()
+        .child('studentsFaces/')
+        .child('Student$id');
+    await reference.putFile(image);
+    url = await reference.getDownloadURL();
+    return url;
+  }
+
+//Face Registration Dialogue
   TextEditingController textEditingController = TextEditingController();
+  TextEditingController idEditingController = TextEditingController();
   showFaceRegistrationDialogue(File cropedFace, Recognition recognition) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text("Face Registration", textAlign: TextAlign.center),
         alignment: Alignment.center,
+        scrollable: true,
         content: SizedBox(
           height: 380,
           child: Column(
@@ -130,11 +163,24 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         filled: true,
                         hintText: "Enter Name")),
               ),
+              SizedBox(
+                width: 230,
+                child: TextField(
+                    controller: idEditingController,
+                    decoration: const InputDecoration(
+                        fillColor: Colors.white,
+                        filled: true,
+                        hintText: "Enter ID")),
+              ),
               ElevatedButton(
                   onPressed: () {
                     HomePage.registered.putIfAbsent(
                         textEditingController.text, () => recognition);
+                    // Save the face data to Firebase Cloud Firestore
+                    saveFaceToFirestore(textEditingController.text, recognition,
+                        idEditingController.text);
                     textEditingController.text = "";
+                    idEditingController.text = "";
                     Navigator.pop(context);
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text("Face Registered"),
@@ -223,7 +269,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     builder: (context) => const AttendanceWcameraPage()),
               );
             },
-            child: Text("real Time recognize"),
+            child: Text("real Time recognize with camera"),
           ),
           const Text(
             "Choose image Or Capture from Camera",

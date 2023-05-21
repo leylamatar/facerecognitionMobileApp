@@ -18,7 +18,7 @@ class _showstudentPageState extends State<showstudentPage> {
         title: Text("Student List"),
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('students').snapshots(),
+        stream: FirebaseFirestore.instance.collection('faces').snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
             return Center(
@@ -53,10 +53,10 @@ class _showstudentPageState extends State<showstudentPage> {
                         ),
                         const SizedBox(height: 10),
                         Text(
-                            "Student Name :${snapshot.data?.docs[index]['Name']} "),
+                            "Student Name :${snapshot.data?.docs[index]['name']} "),
                         Text("Student ID: ${snapshot.data?.docs[index]['id']}"),
-                        Text(
-                            "Student Email : ${snapshot.data?.docs[index]['Email']}"),
+                        //Text(
+                           // "Student Email : ${snapshot.data?.docs[index]['Email']}"),
 
                         // Text(snapshot.data?.docs[index]['id']),
                       ],

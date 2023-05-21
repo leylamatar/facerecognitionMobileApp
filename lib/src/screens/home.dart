@@ -1,4 +1,4 @@
-import 'package:facerecognition/src/screens/registrationPage.dart';
+import 'package:facerecognition/src/screens/studentregistrationPage.dart';
 import 'package:facerecognition/src/screens/studentlist.dart';
 import 'package:facerecognition/src/screens/takeattendance.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -86,7 +86,7 @@ class _HomePageState extends State<HomePage> {
                     );
                   },
                   style: sharedButtonStyle,
-                  child: const Text('Course List'),
+                  child: const Text('Course List/add student'),
                 ),
                 const SizedBox(height: 20.0),
                 ElevatedButton(

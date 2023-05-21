@@ -2,7 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 //import 'package:facerecognition/registrationPage.dart';
 import 'package:facerecognition/src/screens/home.dart';
-import 'package:facerecognition/src/screens/registrationPage.dart';
+import 'package:facerecognition/src/screens/studentregistrationPage.dart';
 import 'package:image/image.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 import 'package:tflite_flutter_helper/tflite_flutter_helper.dart';
@@ -12,6 +12,8 @@ import '../main.dart';
 class Recognizer {
   late Interpreter interpreter;
   late InterpreterOptions _interpreterOptions;
+
+  static Map<String, Recognition> registered = {};
 
   late List<int> _inputShape;
   late List<int> _outputShape;
@@ -25,14 +27,13 @@ class Recognizer {
   late var _probabilityProcessor;
 
   @override
-  String get modelName => 'mobile_face_net.tflite';
+  String get modelName => 'facenet.tflite';
 
   @override
   NormalizeOp get preProcessNormalizeOp => NormalizeOp(127.5, 127.5);
 
   @override
   NormalizeOp get postProcessNormalizeOp => NormalizeOp(0, 1);
-
 
   Recognizer({int? numThreads}) {
     _interpreterOptions = InterpreterOptions();
@@ -46,7 +47,7 @@ class Recognizer {
   Future<void> loadModel() async {
     try {
       interpreter =
-      await Interpreter.fromAsset(modelName, options: _interpreterOptions);
+          await Interpreter.fromAsset(modelName, options: _interpreterOptions);
       print('Interpreter Created Successfully');
 
       _inputShape = interpreter.getInputTensor(0).shape;
@@ -61,19 +62,20 @@ class Recognizer {
       print('Unable to create interpreter, Caught Exception: ${e.toString()}');
     }
   }
+
 //resizing the image to process
   TensorImage _preProcess() {
     int cropSize = min(_inputImage.height, _inputImage.width);
     return ImageProcessorBuilder()
         .add(ResizeWithCropOrPadOp(cropSize, cropSize))
         .add(ResizeOp(
-        _inputShape[1], _inputShape[2], ResizeMethod.NEAREST_NEIGHBOUR))
+            _inputShape[1], _inputShape[2], ResizeMethod.NEAREST_NEIGHBOUR))
         .add(preProcessNormalizeOp)
         .build()
         .process(_inputImage);
   }
 
-  Recognition recognize(Image image,Rect location) {
+  Recognition recognize(Image image, Rect location) {
     final pres = DateTime.now().millisecondsSinceEpoch;
     _inputImage = TensorImage(_inputType);
     _inputImage.loadImage(image);
@@ -85,25 +87,26 @@ class Recognizer {
     final run = DateTime.now().millisecondsSinceEpoch - runs;
     print('Time to run inference: $run ms');
     //
-     _probabilityProcessor.process(_outputBuffer);
+    _probabilityProcessor.process(_outputBuffer);
     //     .getMapWithFloatValue();
     // final pred = getTopProbability(labeledProb);
     print(_outputBuffer.getDoubleList());
     Pair pair = findNearest(_outputBuffer.getDoubleList());
-    return Recognition(pair.name,location, _outputBuffer.getDoubleList(),pair.distance,);
+    return Recognition(pair.name, location, _outputBuffer.getDoubleList(),
+        pair.distance, pair.id);
   }
 
-  //TODO  looks for the nearest embeeding in the dataset
+  // looks for the nearest embeeding in the dataset
   // and retrurns the pair <id, distance>
-  findNearest(List<double> emb){
-    Pair pair = Pair("Unknown", -5);
+  findNearest(List<double> emb) {
+    Pair pair = Pair("Unknown", -5, "");
     for (MapEntry<String, Recognition> item in HomePage.registered.entries) {
       final String name = item.key;
       List<double> knownEmb = item.value.embeddings;
       double distance = 0;
       for (int i = 0; i < emb.length; i++) {
         double diff = emb[i] - knownEmb[i];
-        distance += diff*diff;
+        distance += diff * diff;
       }
       distance = sqrt(distance);
       if (pair.distance == -5 || distance < pair.distance) {
@@ -117,12 +120,11 @@ class Recognizer {
   void close() {
     interpreter.close();
   }
-
-}
-class Pair{
-   String name;
-   double distance;
-   Pair(this.name,this.distance);
 }
 
-
+class Pair {
+  String name;
+  String id;
+  double distance;
+  Pair(this.name, this.distance, this.id);
+}
