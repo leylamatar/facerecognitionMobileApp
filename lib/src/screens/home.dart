@@ -5,18 +5,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'addstudent.dart';
 import '/ML/Recognition.dart';
+import 'attendanceSheet.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
   //to save the faces globaly we used map
-static Map<String, Recognition> registered = Map();
+  static Map<String, Recognition> registered = Map();
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 ButtonStyle sharedButtonStyle = ButtonStyle(
-  backgroundColor:
-      MaterialStateProperty.all<Color>(const Color.fromARGB(255, 255, 255, 255)),
+  backgroundColor: MaterialStateProperty.all<Color>(
+      const Color.fromARGB(255, 255, 255, 255)),
   foregroundColor:
       MaterialStateProperty.all<Color>(const Color.fromARGB(255, 0, 22, 68)),
   padding: MaterialStateProperty.all<EdgeInsets>(const EdgeInsets.all(15)),
@@ -91,7 +92,11 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(height: 20.0),
                 ElevatedButton(
                   onPressed: () {
-                   
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const AttendanceSheetPage()),
+                    );
                   },
                   style: sharedButtonStyle,
                   child: const Text('Attendance Sheet'),
@@ -101,7 +106,8 @@ class _HomePageState extends State<HomePage> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const AddStudentPage()),
+                      MaterialPageRoute(
+                          builder: (context) => const AddStudentPage()),
                     );
                   },
                   style: sharedButtonStyle,

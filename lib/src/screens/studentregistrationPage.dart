@@ -103,6 +103,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
       showFaceRegistrationDialogue(croppedFace, recognition);
     }
+    
     setState(() {
       _image;
     });

@@ -1,12 +1,17 @@
 import 'dart:io';
+import 'package:excel/excel.dart';
 import 'package:facerecognition/src/screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image/image.dart' as img;
+//import 'package:intl/intl.dart';
 import '../../ML/Recognition.dart';
 import '/ML/Recognizer.dart';
+import 'attendanceSheet.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 
 class TakeAttendancePage extends StatefulWidget {
   const TakeAttendancePage({super.key});
@@ -51,6 +56,50 @@ class _TakeAttendancePageState extends State<TakeAttendancePage> {
         _image = File(pickedFile.path);
         doFaceDetection();
       });
+    }
+  }
+
+  String _getFormattedDate(DateTime date) {
+    return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+  }
+
+  void saveAttendanceToSheet(List<Recognition> recognitions) async {
+    Directory? appDocumentsDirectory;
+    if (Platform.isAndroid || Platform.isIOS) {
+      appDocumentsDirectory = await getApplicationDocumentsDirectory();
+    } else {
+      // Handle other platforms as needed
+    }
+
+    if (appDocumentsDirectory != null) {
+      final currentDate = _getFormattedDate(DateTime.now());
+      final filePath =
+          '${appDocumentsDirectory.path}/attendance_$currentDate.csv';
+      final file = File(filePath);
+
+      // Check if the file with today's date already exists
+      if (!await file.exists()) {
+        // Create a new file with the header
+        await file.writeAsString('Name,Date\n');
+      }
+
+      String csvContent = '';
+
+      // Append the new attendance data to the content
+      for (Recognition recognition in recognitions) {
+        if (recognition.name != 'Unknown') {
+          csvContent += '${recognition.name},$currentDate\n';
+        }
+      }
+
+      try {
+        // Write the attendance data to the file
+        await file.writeAsString(csvContent, mode: FileMode.append);
+        print('Attendance saved successfully.');
+        print('File path: $filePath');
+      } catch (e) {
+        print('Failed to save attendance: $e');
+      }
     }
   }
 
@@ -100,8 +149,10 @@ class _TakeAttendancePageState extends State<TakeAttendancePage> {
         recognition.name = "Unknown";
       }
       recognitions.add(recognition);
+      saveAttendanceToSheet(recognitions);
       print(recognition.name + " " + recognition.distance.toString());
     }
+
     setState(() {
       _image;
     });
@@ -250,7 +301,7 @@ class FacePainter extends CustomPainter {
       canvas.drawRect(face.location, p);
 
       TextSpan span = TextSpan(
-          style: TextStyle(color: Colors.white, fontSize: 20),
+          style: TextStyle(color: Colors.white, fontSize: 50),
           text: "${face.name} ${face.distance.toStringAsFixed(2)} ");
       TextPainter painter = TextPainter(
           text: span,

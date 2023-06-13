@@ -121,6 +121,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.2"
+  equatable:
+    dependency: transitive
+    description:
+      name: equatable
+      sha256: c2b87cb7756efdf69892005af546c56c0b5037f54d2a88269b4f347a505e3ca2
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.5"
+  excel:
+    dependency: "direct main"
+    description:
+      name: excel
+      sha256: f6a76fff6ac14f48fd44a6528e72705965e02cbc593e00427ab1d9a9f5d3bffa
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.0"
   fake_async:
     dependency: transitive
     description:
@@ -157,18 +173,18 @@ packages:
     dependency: transitive
     description:
       name: firebase_auth_platform_interface
-      sha256: "5d5f283517ba34afd69ef448cc81ea23bcf8887393bedae4f70f45060b045fb9"
+      sha256: "00247ae9b9deb1d1ef3ff1b0c7a1103b51caf973b8a43f326595e414380fd5e2"
       url: "https://pub.dev"
     source: hosted
-    version: "6.13.0"
+    version: "6.15.0"
   firebase_auth_web:
     dependency: transitive
     description:
       name: firebase_auth_web
-      sha256: f50f7026b95c62dba3f0b28bdb3ab3601ea402b4908c1469103f16ae2b0f5281
+      sha256: "2c273f8bd78ba5fcd955b85ac0cbba1e7568fee02f14ef9416befcb899a2aa9e"
       url: "https://pub.dev"
     source: hosted
-    version: "5.3.0"
+    version: "5.5.0"
   firebase_core:
     dependency: "direct main"
     description:
@@ -353,13 +369,13 @@ packages:
     source: hosted
     version: "2.6.3"
   intl:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: intl
-      sha256: "910f85bce16fb5c6f614e117efa303e85a1731bb0081edf3604a2ae6e9a3cc91"
+      sha256: "3bc132a9dbce73a7e4a21a17d06e1878839ffbf975568bc875c60537824b0c4d"
       url: "https://pub.dev"
     source: hosted
-    version: "0.17.0"
+    version: "0.18.1"
   js:
     dependency: transitive
     description:
@@ -400,6 +416,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.8.0"
+  open_file:
+    dependency: "direct main"
+    description:
+      name: open_file
+      sha256: "5cd0288033d613ee7908aa974b7ff00805ae55d253f64d311603cf2e30613ca8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.2.1"
   path:
     dependency: transitive
     description:
@@ -409,7 +433,7 @@ packages:
     source: hosted
     version: "1.8.2"
   path_provider:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: path_provider
       sha256: "3087813781ab814e4157b172f1a11c46be20179fcc9bea043e0fba36bc0acaa2"
