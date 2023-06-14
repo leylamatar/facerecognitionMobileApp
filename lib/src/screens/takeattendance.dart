@@ -186,7 +186,7 @@ class _TakeAttendancePageState extends State<TakeAttendancePage> {
       backgroundColor: const Color.fromARGB(255, 24, 56, 82),
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 14, 56, 90),
-        title: const Text("Add students informations"),
+        title: const Text("Take Attendance"),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
