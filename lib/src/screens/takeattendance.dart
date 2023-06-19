@@ -26,6 +26,7 @@ class _TakeAttendancePageState extends State<TakeAttendancePage> {
   late FaceDetector faceDetector; //declare detection
 
   late Recognizer recognizer;
+  String selectedClass = 'Oyun Programlama';
   @override
   void initState() {
     super.initState();
@@ -33,7 +34,6 @@ class _TakeAttendancePageState extends State<TakeAttendancePage> {
     //initialize face detector
     final options = FaceDetectorOptions();
     faceDetector = FaceDetector(options: options);
-
     // initialize face recognizer
     recognizer = Recognizer();
   }
@@ -219,6 +219,42 @@ class _TakeAttendancePageState extends State<TakeAttendancePage> {
                     height: 220,
                   ),
                 ),
+          const SizedBox(
+            height: 20,
+          ),
+          Column(
+            children: [
+              const Text(
+                "Ders Seç",
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.white,
+                ),
+              ),
+              DropdownButton<String>(
+                value: selectedClass,
+                onChanged: (String? newValue) {
+                  setState(() {
+                    selectedClass = newValue!;
+                  });
+                },
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Color.fromARGB(255, 1, 9, 34),
+                ),
+                items: <String>[
+                  'Oyun Programlama',
+                  'Bilgisayar ve ağ güvenliği',
+                  'sinyaller ve sistemler',
+                ].map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+            ],
+          ),
           Container(
             height: 50,
           ),
@@ -230,6 +266,7 @@ class _TakeAttendancePageState extends State<TakeAttendancePage> {
           const SizedBox(
             height: 20,
           ),
+
           //section which displays buttons for choosing and capturing images
           Container(
             margin: const EdgeInsets.only(bottom: 10),
@@ -301,7 +338,7 @@ class FacePainter extends CustomPainter {
       canvas.drawRect(face.location, p);
 
       TextSpan span = TextSpan(
-          style: TextStyle(color: Colors.white, fontSize: 50),
+          style: TextStyle(color: Colors.white, fontSize: 30),
           text: "${face.name} ${face.distance.toStringAsFixed(2)} ");
       TextPainter painter = TextPainter(
           text: span,

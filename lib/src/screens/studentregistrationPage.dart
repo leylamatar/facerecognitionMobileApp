@@ -25,6 +25,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
   late FaceDetector faceDetector; //declare detection
   late Recognizer recognizer;
 
+  List<String> classList = [
+    'Oyun Programlama',
+    'Bilgisayar ve ağ güvenliği',
+    'sinyaller ve sistemler',
+    
+  ];
+  String selectedClass = 'Oyun Programlama';
+
   @override
   void initState() {
     super.initState();
@@ -103,7 +111,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
       showFaceRegistrationDialogue(croppedFace, recognition);
     }
-    
+
     setState(() {
       _image;
     });
@@ -111,20 +119,21 @@ class _RegistrationPageState extends State<RegistrationPage> {
   }
 
   void saveFaceToFirestore(
-      String name, Recognition recognition, String id) async {
+      String name, Recognition recognition, String id,String selectedClass) async {
     final imgurl = await uploadImage(_image!);
 
     print('ID: $id');
     firestore.collection('faces').add({
       'name': name.trim(),
       'id': id,
+      'class' : selectedClass,
       "Profile Picture": imgurl,
     });
   }
 
   Future uploadImage(File image) async {
     String url;
-   // String imgId = DateTime.now().microsecondsSinceEpoch.toString();
+    // String imgId = DateTime.now().microsecondsSinceEpoch.toString();
     String id = idEditingController.text;
     Reference reference = FirebaseStorage.instance
         .ref()
@@ -173,13 +182,28 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         filled: true,
                         hintText: "Enter ID")),
               ),
+              SizedBox(
+                width: 230,
+                child: DropdownButtonFormField<String>(
+                  value: selectedClass,
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      selectedClass = newValue!;
+                    });
+                  },
+                  items: classList.map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),),),
               ElevatedButton(
                   onPressed: () {
                     HomePage.registered.putIfAbsent(
                         textEditingController.text, () => recognition);
                     // Save the face data to Firebase Cloud Firestore
                     saveFaceToFirestore(textEditingController.text, recognition,
-                        idEditingController.text);
+                        idEditingController.text,selectedClass);
                     textEditingController.text = "";
                     idEditingController.text = "";
                     Navigator.pop(context);
@@ -270,7 +294,15 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     builder: (context) => const AttendanceWcameraPage()),
               );
             },
-            child: Text("real Time recognize with camera"),
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(
+                  Color.fromARGB(255, 0, 79, 143)),
+              foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+              padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+              ),
+            ),
+            child: Text("Real Time recognize with camera"),
           ),
           const Text(
             "Choose image Or Capture from Camera",

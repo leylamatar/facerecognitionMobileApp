@@ -87,7 +87,7 @@ class _HomePageState extends State<HomePage> {
                     );
                   },
                   style: sharedButtonStyle,
-                  child: const Text('Course List/add student'),
+                  child: const Text('Add New Student'),
                 ),
                 const SizedBox(height: 20.0),
                 ElevatedButton(
@@ -102,27 +102,27 @@ class _HomePageState extends State<HomePage> {
                   child: const Text('Attendance Sheet'),
                 ),
                 const SizedBox(height: 20.0),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const AddStudentPage()),
-                    );
-                  },
-                  style: sharedButtonStyle,
-                  child: const Text('Add New Student'),
-                ),
+               // ElevatedButton(
+                 // onPressed: () {
+                 //   Navigator.push(
+                   //   context,
+                  //    MaterialPageRoute(
+                      //    builder: (context) => const AddStudentPage()),
+                   // );
+                //  },
+                 // style: sharedButtonStyle,
+               //   child: const Text('Add New Student'),
+              //  ),
                 const SizedBox(height: 40.0),
                 ElevatedButton(
                   onPressed: () {
                     FirebaseAuth.instance.signOut();
                   },
                   style: ElevatedButton.styleFrom(
-                    textStyle: const TextStyle(fontSize: 15),
-                    backgroundColor: const Color.fromARGB(255, 4, 1, 37),
+                    textStyle: const TextStyle(fontSize: 15,color: Color.fromARGB(255, 0, 16, 29)),
+                    backgroundColor: Color.fromARGB(255, 42, 58, 65),
                   ),
-                  child: const Text('Log Out'),
+                  child: const Text('Log Out' ),
                 ),
               ],
             ),

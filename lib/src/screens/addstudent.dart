@@ -12,34 +12,13 @@ class AddStudentPage extends StatefulWidget {
   @override
   State<AddStudentPage> createState() => _AddStudentPageState();
 }
-
+//not using this file 
 class _AddStudentPageState extends State<AddStudentPage> {
   var globalKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _idController = TextEditingController();
   final _emailController = TextEditingController();
 
-  void showSuccessToast() {
-    Fluttertoast.showToast(
-      msg: "Data added successfully",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.CENTER,
-      backgroundColor: Colors.green,
-      textColor: Colors.white,
-      fontSize: 16.0,
-    );
-  }
-
-  void showErrorToast() {
-    Fluttertoast.showToast(
-      msg: "Error adding data",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.CENTER,
-      backgroundColor: Colors.red,
-      textColor: Colors.white,
-      fontSize: 16.0,
-    );
-  }
 
   CollectionReference students =
       FirebaseFirestore.instance.collection('students');
